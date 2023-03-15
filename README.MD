@@ -15,88 +15,47 @@ Sample project to help drive home the mechanics of the schema migration. This wi
 - docker - Used for testing database migrations locally
 
 
-0. Bring up MySQL database via Docker
-
-```
-docker-compose up
-```
-
-1. display the current status of migrations
-
-goose -dir database mysql "user:password@/database?parseTime=true" status
-
-```
-2023/03/13 12:41:52     Applied At                  Migration
-2023/03/13 12:41:52     =======================================
-2023/03/13 12:41:52     Pending                  -- 20230313120026_add_user.sql
-2023/03/13 12:41:52     Pending                  -- 20230313120058_add_pets.sql
-```
-
-2. apply all available migrations
-
-```
-goose -dir database mysql "user:password@/database?parseTime=true" up   
-```
-
-You should see: 
-
-```
-2023/03/13 12:42:22 OK   20230313120026_add_user.sql (20.13ms)
-2023/03/13 12:42:22 OK   20230313120058_add_pets.sql (23.25ms)
-2023/03/13 12:42:22 goose: no migrations to run. current version: 20230313120058
-```
-2. goose -dir database mysql "user:password@/database?parseTime=true" down
-
-```
-goose -dir database mysql "user:password@/database?parseTime=true" down  
-
-2023/03/13 12:42:40 OK   20230313120058_add_pets.sql (17.32ms)
-```
-
-goose -dir database mysql "user:password@/database?parseTime=true" status
-
-```
-2023/03/13 12:42:43     Applied At                  Migration
-2023/03/13 12:42:43     =======================================
-2023/03/13 12:42:43     Mon Mar 13 19:42:22 2023 -- 20230313120026_add_user.sql
-2023/03/13 12:42:43     Pending                  -- 20230313120058_add_pets.sql
-```
-
-
 # Local Application Development
 
-Navigate to schema-migrations folder. 
 
-1. Run 
-    docker-compose up
-2. Run 
-    python3 api.py
-3. Navigate to
-     http://0.0.0.0:8000/v1/users
-4. Should throw error: 
-    Database users does not exist
-5. Run goose up 
+1.  Navigate to the `schema-migrations` folder in your terminal.
+    
+2.  Run `docker-compose up` to start the Docker container.
+    
+3.  Run `python3 api.py` to start the API.
+    
+4.  Open your web browser and navigate to `http://0.0.0.0:8000/v1/users`. You should see an error message saying that the database "users" does not exist.
+    
+5.  Run the following command to check the status of the migrations:
+    
+    ```
     goose -dir database mysql "user:password@/database?parseTime=true" status
-6. Run goose up
+    ```
+    
+6.  Run the following command to apply the migrations:
+    
+     ```
     goose -dir database mysql "user:password@/database?parseTime=true" up
-7. Verify that all migrations successfully completed with OK 
-8.  Navigate to
-     http://0.0.0.0:8000/v1/users
-9. You should see [] 
-10. Add new user by running the following curl command in the terminal:
-```
-curl -X 'POST' \
-  'http://0.0.0.0:8000/users?name=Hello&email=hello@meow.com' \
-  -H 'accept: application/json' \
-  -d ''
-```
-11. Navigate to http://0.0.0.0:8000/users
-You should see the new user. 
+    ```
+    
+7.  Verify that all migrations completed successfully with an "OK" message.
+    
+8.  Navigate to `http://0.0.0.0:8000/v1/users`. You should see an empty array `[]`.
+    
+9.  To add a new user, run the following `curl` command in the terminal:
+    
+     ```
+    curl -X 'POST' \   'http://0.0.0.0:8000/users?name=Hello&email=hello@meow.com' \   -H 'accept: application/json' \   -d 
+     ```
+    
+    This will create a new user with the name "Hello" and email "[hello@meow.com](mailto:hello@meow.com)".
+    
+10.  Navigate to `http://0.0.0.0:8000/users`. You should now see the new user in the array.
+    
+11.  To view the API documentation, navigate to `http://0.0.0.0:8000/docs` in your web browser.
+    
 
-
-You can see the API documentation by navigating to:
-- http://0.0.0.0:8000/docs
-
+Make sure to follow each step carefully to ensure that the migrations and API are set up correctly, and feel free to ask for help if you encounter any issues. Happy coding!
 
 
 ## You have 45 minutes to complete the following
